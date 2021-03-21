@@ -9,12 +9,11 @@ RUN apk update \
 	&& rm -rf /etc/unbound/unbound.conf /etc/unbound/root.hints \
 	&& curl  --ipv4 https://www.internic.net/domain/named.root > /etc/unbound/root.hints
 
-COPY scripts/ /scripts
 COPY unbound.conf /etc/unbound/unbound.conf
 COPY supervisor-unbound.ini /etc/supervisor.d/supervisor-unbound.ini
 COPY docker-entrypoint /docker-entrypoint
 
-RUN chmod u+x /docker-entrypoint /scripts/*
+RUN chmod u+x /docker-entrypoint
 
 ENTRYPOINT ["/docker-entrypoint"]
 CMD [ "/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf" ]

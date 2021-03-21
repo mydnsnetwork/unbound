@@ -34,19 +34,8 @@ unbound-anchor -a ${UNBOUND_ANCHOR_FILE} || echo
 chown -Rf unbound:unbound /etc/unbound /etc/unbound/keys
 chmod 644 /etc/unbound/*.conf
 
-# If it does not exist, we update our blocked hosts file
-if [[ ! -f ${UNBOUND_BLOCKED_HOSTS_FILE} ]]; then
-  /bin/bash /scripts/update_blocklists.sh "${UNBOUND_BLOCKED_HOSTS_FILE}" no-reload
-fi
-
-printf "| ENTRYPOINT: \033[0;31mStarting supervisord (which starts and monitors cron and unbound) \033[0m\n"
+printf "| ENTRYPOINT: \033[0;31mStarting supervisord (which starts and monitors unbound) \033[0m\n"
 printf "|---------------------------------------------------------------------------------------------\n";
-
-# Lets create cron script for updating host daily
-CRON_FILE=/etc/periodic/daily/updatehosts
-printf "#!/bin/bash\nPATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\n" > ${CRON_FILE}
-printf ". /scripts/update_blocklists.sh ${UNBOUND_BLOCKED_HOSTS_FILE}\n" >> ${CRON_FILE}
-chmod +x ${CRON_FILE}
 
 # And off we launch
 exec $@
