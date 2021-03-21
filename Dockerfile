@@ -6,8 +6,7 @@ RUN apk update \
 	supervisor \
 	unbound \
 	openssl \
-	&& rm -rf /etc/unbound/unbound.conf /etc/unbound/root.hints \
-	&& curl  --ipv4 https://www.internic.net/domain/named.root > /etc/unbound/root.hints
+	&& rm -rf /etc/unbound/unbound.conf /etc/unbound/root.hints
 
 COPY unbound.conf /etc/unbound/unbound.conf
 COPY supervisor-unbound.ini /etc/supervisor.d/supervisor-unbound.ini
